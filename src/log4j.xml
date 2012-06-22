@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- コンソール出力 -->
+    <appender name="Console" class="org.apache.log4j.ConsoleAppender">
+        <param name="encoding" value="UTF-8" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss} %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="RollingAppender" class="org.apache.log4j.rolling.RollingFileAppender">
+        <param name="file" value="sample.log" />
+        <param name="encoding" value="UTF-8" />
+        <param name="append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyyMMdd HHmmss} %m%n" />
+        </layout>
+        
+        <triggeringPolicy class="org.apache.log4j.rolling.FilterBasedTriggeringPolicy">
+            <filter class="org.apache.log4j.filter.StringMatchFilter" >
+                <param name="StringToMatch" value="手動ローテーションするよ。" />
+                <param name="AcceptOnMatch" value="true" />
+            </filter>
+            <filter class="org.apache.log4j.filter.DenyAllFilter" />
+        </triggeringPolicy>
+        
+        <rollingPolicy class="org.apache.log4j.rolling.FixedWindowRollingPolicy">
+            <param name="FileNamePattern" value="rotated%i.log" />
+            <param name="MinIndex" value="1" />
+            <param name="MaxIndex" value="5" />
+        </rollingPolicy>    
+    </appender>
+
+    <root>
+        <level value="info" />
+        <appender-ref ref="Console" />
+        <appender-ref ref="RollingAppender" />
+    </root>
+
+</log4j:configuration>
